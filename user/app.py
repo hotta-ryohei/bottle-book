@@ -2,16 +2,17 @@ from bottle import Bottle,\
     jinja2_template as template,\
         static_file, request, redirect
         
-from bottle import response, run
+from bottle import response, run, TEMPLATE_PATH
 import psycopg2
 import psycopg2.extras
+import os
 
 #DB接続状況
 DB_HOST = 'localhost'
 DB_PORT = '5432'
 DB_NAME = 'book_data'
 DB_USER = 'book_user'
-DB_PASS = '<!--Darawomac314-->'
+DB_PASS = 'Darawomac314'
 
 def get_connection():
     dsn = 'host={host} port={port} dbname={dbname} \
@@ -21,6 +22,7 @@ def get_connection():
     return psycopg2.connect(dsn)
 
 app = Bottle()
+TEMPLATE_PATH.append(os.path.abspath('user/views'))
 @app.route('/', method=['GET', 'POST'])
 def index():
    return "Hello World"
@@ -63,7 +65,7 @@ def add():
     </body>
     </html>
     """
-    
+    #GETでアクセスされたら
     if request.method == "GET" or request.forms.get('next') == 'back':
         return form_html.replace('<!--user_id-->', '').\
         replace('<!--passwd-->', '').\
@@ -71,6 +73,7 @@ def add():
         replace('<!--user_shi-->', '').\
         replace('<!--user_mei-->', '')
     else:
+        #postされたフォームの値を取得する
         form = {}
         form['user_id'] = request.forms.decode().get('user_id')
         form['passwd'] = request.forms.decode().get('passwd')
@@ -92,6 +95,8 @@ def add():
 @app.route('/regist', method=["POST"])
 def regist():
     if request.forms.get('next') == 'back':
+        #確認画面から戻るボタンを押す
+        #登録フォームに戻る
         response.status = 307
         response.set_header("Location", '/add')
         return response
@@ -111,16 +116,16 @@ def regist():
             'email':email, 'user_shi':user_shi,\
             'user_mei':user_mei}
         
-        with get_connection() as con:
-            with con.cursor() as cur:
+        with get_connection() as con:#DBの接続を取得
+            with con.cursor() as cur:#カーソルを取得
                 cur.execute(sql, val)
             con.commit()
         redirect('/add')
         
-@app.route('/list')
-def list():
+@app.route('/user_list')
+def user_list():
     sql = """select user_id, email, user_shi,\
-        user_mei from bool_user \
+        user_mei from book_user \
         where del = false \
         order by user_id asc;"""
     with get_connection() as con:
@@ -128,8 +133,7 @@ def list():
             cur.execute(sql)
             rows = cur.fetchall()
             rows = [dict(row) for row in rows]
-    return template('list.html', rows=rows)            
+    return template('user_list.html', rows=rows)            
             
 if __name__ == '__main__':
-    run(app=app, host='0.0.0.0', port=8889, reloader=True,
-debug=True)
+    run(app=app, host='0.0.0.0', port=8889, reloader=True,debug=True)
