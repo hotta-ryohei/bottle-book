@@ -8,7 +8,7 @@ from datetime import datetime
 
 DATABASE = 'postgresql'
 USER = 'book_user'
-PASSWORD = 'Darawomac314'
+PASSWORD = 'Darawomac31'
 HOST = 'localhost'
 PORT = '5432'
 DB_NAME = 'book_data'
@@ -26,7 +26,7 @@ class Books(Base) :
     id_ = Column('id',Integer,primary_key=True)
     name = Column('name',String(255))
     volume = Column('volume',String(255))
-    author= Column('author',String(255))
+    author = Column('author',String(255))
     publisher = Column('publisher',String(255))
     memo = Column('memo',Text())
     create_date = Column('create_date',\
@@ -35,7 +35,7 @@ class Books(Base) :
     
 class BookUser(Base) :
     __tablename__ = "book_user"
-    user_id_ = Column('user_id',String(255),primary_key=True)
+    user_id = Column('user_id',String(255),primary_key=True)
     passwd = Column('passwd',String(255),nullable=False)
     email = Column('email',String(255),nullable=False)
     user_shi = Column('user_shi',String(255))
