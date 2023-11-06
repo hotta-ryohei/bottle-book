@@ -8,7 +8,7 @@ from datetime import datetime
 
 DATABASE = 'postgresql'
 USER = 'book_user'
-PASSWORD = 'Darawomac31'
+PASSWORD = ''
 HOST = 'localhost'
 PORT = '5432'
 DB_NAME = 'book_data'

@@ -12,7 +12,7 @@ DB_HOST = 'localhost'
 DB_PORT = '5432'
 DB_NAME = 'book_data'
 DB_USER = 'book_user'
-DB_PASS = 'Darawomac314'
+DB_PASS = ''
 
 def get_connection():
     dsn = 'host={host} port={port} dbname={dbname} \
